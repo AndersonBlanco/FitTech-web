@@ -1,0 +1,60 @@
+//outside body 
+ function TestCV(){
+  const {loaded, cv} = useOpenCv();
+     useEffect(() =>{
+    if(cv){
+ 
+    }
+  }, [cv])
+    return (<p>opencv loaded </p>)
+  }
+  
+
+
+  ///in body 
+function setUpMeta(){
+    document.title = 'FitTech'; 
+  }
+  setUpMeta();
+
+  const onLoaded = (cv) =>{
+    console.log('opencv loaded', cv); 
+  }
+
+  const task =  async() =>{
+    const vision = await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    );
+///workspaces/FitTech-web/fit_tech/src/
+    const poseLandmarker = await PoseLandmarker.createFromOptions(
+      vision,
+      {
+        baseOptions: {
+          modelAssetPath: './pose_estimation_model/pose_landmarker_lite.task',
+        },
+        runningMode: 'VIDEO' 
+      }
+    );
+    let lastVideoTime = -1
+   /////////////video/////////////////////////
+    function renderLoop(){
+      const video = document.getElementById('video');
+
+      if(video.currentTime != lastVideoTime){
+        const poseLandmarkerResult = poseLandmarker.detect(video);
+
+        processResults(detections);
+        lastVideoTime = video.currentTime; 
+      }
+    };
+    ///////////////////img////////////////////////
+
+    function imgDetect(){
+    let image = document.getElementById('img'); 
+    const results = poseLandmarker.detect(img); 
+    }
+
+  }
+
+
+ 
