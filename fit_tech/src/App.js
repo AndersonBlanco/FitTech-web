@@ -1,33 +1,38 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState, } from 'react';
 
 import Webcam from 'react-webcam';
-//import {OpenCvProvider, useOpenCv} from 'opencv-react';
-//import {FilesetResolver, PoseLandmarker} from '@mediapipe/tasks-vision';
+import {OpenCvProvider, useOpenCv} from 'opencv-react';
+import {FilesetResolver, PoseLandmarker} from '@mediapipe/tasks-vision';
 import * as tf from '@tensorflow/tfjs';
 import * as posenet from '@tensorflow-models/posenet';
 import {drawKeypoints, drawSkeleton} from './utilities';
+
+import v from './h.mp4';
+
 function App(){
 const WebCamRef = useRef(null);
 const canvasRef = useRef(null);
 
 const [buttonC, setButtonC] = useState(false); 
+const w = window.innerWidth/2.2
+const h = window.innerHeight/1.7
+
 const CAM = (
   <>
   <Webcam
-   mirrored = {true}
+   mirrored = {false}
   ref = {WebCamRef}
   style = {{
-    position:'absolute',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    position:'relative',
     right: 0,
     left: 0,
     textAlign:'center',
     zIndex: 9,
-    width: 700,
-    height: 500,
+    width: w,
+    height: h,
+    backgroundColor:'#5D737E'
   }}
 
   />
@@ -92,6 +97,8 @@ const CAM = (
   
   }
  }
+  togglePoseEstimation();
+  
  const [opacity, setOpacity] = useState(1); 
  function fade(){
   let int = setInterval(() =>{
@@ -127,15 +134,110 @@ const CAM = (
   )
  }
  
+
+ const TUTORIAL = (
+  <div>
+   <h2>Video Player</h2>
+    <video src={v} width="400" height="500" controls autoPlay />
+  </div>
+ )
+
+ const [bc, setBC] = useState('Jab');
+
+ const [vis, setVIS] = useState('none')
+ //stylesheet:
+
+ const styles = {
+  text:{
+    color: 'red'
+  }
+ }
   return (
     <div className="App">
  
-      <h1 t = 'FitTech' >FitTech</h1>
+      <h1 t = 'FitTech' className='head'>FitTech</h1>
  
     
-      {CAM}
+      <div className='secondHeader'>
+        <h1>Choose Class: </h1>
+      <div className='pap'> 
+      <button onMouseDown={()=>{
+        if (vis=='none'){
+          setVIS('block')
+        }
+        else{
+          setVIS('none')
+        }
+      }} className='lessonName'>{bc}</button>
+          <div className='te' style={{display: vis, position: 'absolute', left:0, right:0, margin:'auto'}}>
+            <button onMouseDown={()=>{
+              setBC('Rest')
+            }} style={{position: 'relative',
+            fontSize: '1rem',
+            height: '2.5rem',
+            width: '5rem',
+            textAlign:'center',
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor: 'orange',
+            color: 'white',
+            borderRadius: 10,
+            borderWidth: 0 ,
+            cursor: 'pointer',
+            transitionDuration: '2s',
+            userSelect: 'none',
+            fontWeight: 700}}>Rest</button>
+            <button onMouseDown={()=>{
+              setBC('Jab')
+            }} style={{position: 'relative',
+            fontSize: '1rem',
+            height: '2.5rem',
+            width: '5rem',
+            textAlign:'center',
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor: 'maroon',
+            color: 'white',
+            borderRadius: 10,
+            borderWidth: 0 ,
+            cursor: 'pointer',
+            transitionDuration: '2s',
+            userSelect: 'none',
+            fontWeight: 700}}>Jab</button>
+            <button onMouseDown={()=>{
+              setBC('Uppercut')
+            }} style={{position: 'relative',
+            fontSize: '1rem',
+            height: '2.5rem',
+            width: '5rem',
+            textAlign:'center',
+            alignItems:'center',
+            justifyContent:"center",
+            backgroundColor: 'orange',
+            color: 'white',
+            borderRadius: 10,
+            borderWidth: 0 ,
+            cursor: 'pointer',
+            transitionDuration: '2s',
+            userSelect: 'none',
+            fontWeight: 700}}>Uppercut</button>
+          </div>
+        </div>
+      </div>
       <Button />
-      <h1 style = {{position:'absolute', margin:"auto", bottom: 100, marginInline: '5rem'}}><label>Status: </label>{buttonC? 'off' : 'on'}</h1>
+      <div style={{flexDirection:'row', display:'flex', alignContent:'center', justifyContent:'center', backgroundColor:'#fff'}}>
+        <div>
+
+        <h2>Video Player</h2>
+        <video src={v} width={window.innerWidth/2} height={window.innerHeight/1.7} controls autoPlay />
+
+        {CAM}
+
+        <div>
+          <h3>Turn Your Torso</h3>
+        </div>
+        </div>
+      </div>
   
     </div>
   );

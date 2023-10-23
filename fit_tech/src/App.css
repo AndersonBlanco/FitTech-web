@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   font-size: 16px;
+  color: #221D23;
 }
 
 .App-logo {
@@ -36,4 +37,40 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+body{
+  background-color: #fff
+  ;
+}
+
+.te{
+  display: none;
+}
+
+button{
+  flex:1;
+}
+
+
+
+.head{
+  background-color: #FFD400;
+  position: fixed;
+  width: 100vw;
+  padding: 3vh 0px 2vh 0px;
+  top:-30px
+}
+.secondHeader{
+  margin-top: 10vh;
+  background-color: ;
+}
+
+.lessonName{
+  border-width: 0;
+  background-color: white;
+  font-size: 2rem;
+  color: #5D737E;
+  font-weight: 600;
+  cursor: pointer;
 }
