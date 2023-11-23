@@ -5,7 +5,7 @@ import React, { useEffect, useReducer, useRef, useState, } from 'react';
 import Webcam from 'react-webcam';
 import {OpenCvProvider, useOpenCv} from 'opencv-react';
 import {FilesetResolver, PoseLandmarker} from '@mediapipe/tasks-vision';
-//import * as tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 import * as posenet from '@tensorflow-models/posenet';
 import {drawKeypoints, drawSkeleton} from './utilities';
 
