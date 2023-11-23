@@ -1,15 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useEffect, useReducer, useRef, useState, } from 'react';
-
+//import '@mediapipe/pose';
 import Webcam from 'react-webcam';
 import {OpenCvProvider, useOpenCv} from 'opencv-react';
 import {FilesetResolver, PoseLandmarker} from '@mediapipe/tasks-vision';
-import * as tf from '@tensorflow/tfjs';
+//import * as tf from '@tensorflow/tfjs';
 import * as posenet from '@tensorflow-models/posenet';
 import {drawKeypoints, drawSkeleton} from './utilities';
 
 import v from './h.mp4';
+
+
+//import '@tensorflow/tfjs-backend-webgl';
+//import * as poseDetection from '@tensorflow-models/pose-detection';
+
 
 function App(){
 const WebCamRef = useRef(null);
@@ -52,11 +57,13 @@ const CAM = (
   />
   </>
 )
-  ////tensorflow 
+
+ 
+  ////////////////Tensorflow START///////////////////////
  const poseNetM = async() =>{
   const net = await posenet.load({
-    inputResolution: {width: 700, height: 500},
-    scale: .5
+    //inputResolution: {width: 700, height: 500},
+    scale: 1
   })
   setInterval(() =>{
     detect(net); 
@@ -74,8 +81,16 @@ const CAM = (
     WebCamRef.current.video.width  = videoW;
     WebCamRef.current.video.height = videoH;
 
-    const pose = await net.estimateSinglePose(video); 
-    console.log(pose); 
+    const imageScaleFactor = 1;
+const flipHorizontal = true;
+const outputStride = 16;
+const scoreThreshold = 1.0; 
+// minimum distance in pixels between the root parts of poses
+const nmsRadius = 20;
+const imageElement = document.getElementById('cat');
+
+    const pose = await net.estimateSinglePose(video,  imageScaleFactor, flipHorizontal, outputStride,  1, scoreThreshold, nmsRadius); 
+    //console.log(pose); 
     drawOnCanvas(pose, video, videoW, videoH, canvasRef); 
   }
 }
@@ -97,8 +112,20 @@ const CAM = (
   
   }
  }
-  togglePoseEstimation();
-  
+ togglePoseEstimation();  //Utilizing Tensorflow - trigger pose estimation 
+  ///////// Tensorflow END ///////////////////
+/////////////////////////////////////////////////////
+///////////Tensorflow POSE MOEDEL CREATOR START/////////////////
+
+//heavyTensorflow_init(); 
+
+////////// Tensorflow POSE MODEL CREATION END//////////////////////////////
+/////////////////////////////////////////////////
+/////////// Mediapipe START//////////////////////
+ 
+
+////////////////Mediapipe END///////////////////////
+
  const [opacity, setOpacity] = useState(1); 
  function fade(){
   let int = setInterval(() =>{
