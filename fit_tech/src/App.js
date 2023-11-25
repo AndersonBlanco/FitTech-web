@@ -4,7 +4,7 @@ import React, { useEffect, useReducer, useRef, useState, } from 'react';
 //import '@mediapipe/pose';
 import Webcam from 'react-webcam';
 //import {OpenCvProvider, useOpenCv} from 'opencv-react';
-//import {FilesetResolver, PoseLandmarker} from '@mediapipe/tasks-vision';
+import {FilesetResolver, PoseLandmarker} from '@mediapipe/tasks-vision';
 //import * as tf from '@tensorflow/tfjs';
 import * as posenet from '@tensorflow-models/posenet';
 import {drawKeypoints, drawSkeleton} from './utilities';
@@ -14,7 +14,6 @@ import v from './h.mp4';
 
 //import '@tensorflow/tfjs-backend-webgl';
 //import * as poseDetection from '@tensorflow-models/pose-detection';
-
 
 function App(){
 const WebCamRef = useRef(null);
@@ -112,18 +111,39 @@ const imageElement = document.getElementById('cat');
   
   }
  }
- togglePoseEstimation();  //Utilizing Tensorflow - trigger pose estimation 
+ //togglePoseEstimation();  //Utilizing Tensorflow - trigger pose estimation 
   ///////// Tensorflow END ///////////////////
-/////////////////////////////////////////////////////
-///////////Tensorflow POSE MOEDEL CREATOR START/////////////////
-
-//heavyTensorflow_init(); 
-
-////////// Tensorflow POSE MODEL CREATION END//////////////////////////////
 /////////////////////////////////////////////////
 /////////// Mediapipe START//////////////////////
- 
+const initMediapipe = async() =>{
+  const vision = await FilesetResolver.forVisionTasks(
+    "/pose_estimation_model/pose_landmarker_heavy.task", 
+    );
 
+  const landmarker = await PoseLandmarker.createFromOptions(
+    vision, 
+    {
+      baseOptions:{
+       // modelAssetPath: null
+      },
+      runningMode: "IMAGE"
+    }
+  );  
+  
+  let vid = await WebCamRef.current.video;
+  let pose = landmarker.detect(vid, (res)=>{
+    console.log("This: ", res.landmarks);
+   // res.close(); 
+  })
+
+  requestAnimationFrame(async () =>{
+    initMediapipe(); 
+  })
+
+
+}
+
+initMediapipe(); 
 ////////////////Mediapipe END///////////////////////
 
  const [opacity, setOpacity] = useState(1); 
