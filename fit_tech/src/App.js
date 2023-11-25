@@ -117,7 +117,7 @@ const imageElement = document.getElementById('cat');
 /////////// Mediapipe START//////////////////////
 const initMediapipe = async() =>{
   const vision = await FilesetResolver.forVisionTasks(
-    "/pose_estimation_model/pose_landmarker_heavy.task", 
+    "./pose_estimation_model/pose_landmarker_heavy.task", 
     );
 
   const landmarker = await PoseLandmarker.createFromOptions(
